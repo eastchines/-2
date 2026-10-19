@@ -6,23 +6,23 @@ on: push
 
 jobs:
   build:
-    # 使用Windows虚拟机，打包Windows EXE必须用 windows-latest
+    # 使用Windows虚拟机，打包Windows EXE
     runs-on: windows-latest
     steps:
-      # 拉取仓库源码到运行器
+      # 拉取仓库源码
       - name: 检出代码
         uses: actions/checkout@v6
 
-      # 配置Node.js环境，v4版本兼容Node24，消除弃用警告
+      # 配置Node.js环境
       - name: 安装Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      # 安装项目全部依赖包
+      # 安装项目依赖（pkg打包工具会在这里安装）
       - name: 执行npm安装依赖
         run: npm install
 
-      # 执行打包命令生成EXE，修改为你package.json中真实脚本名
+      # 打包生成EXE文件
       - name: 打包生成EXE文件
         run: npm run build-exe
