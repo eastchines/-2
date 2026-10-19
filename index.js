@@ -1,2 +1,1 @@
-// index.js 测试代码
-console.log("Hello EXE!");
+console.log("测试打包，EXE运行成功！");
