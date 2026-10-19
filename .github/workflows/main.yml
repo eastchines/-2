@@ -1,30 +1,20 @@
-name: Build EXE
-on:
-  push:
-    branches: [ main ]
+name: 构建 EXE
+on: push
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: 检出代码
+        uses: actions/checkout@v6 # 升级版本消除Node20警告
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
         with:
-          python-version: "3.11"
+          node-version: 24
 
-      - name: Install python dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pillow pyinstaller pynput
+      - name: 安装依赖
+        run: npm install
 
-      - name: Build exe with PyInstaller
-        run: pyinstaller main.py -F -w --hidden-import=PIL --hidden-import=pynput
-
-      - name: Upload compiled exe
-        uses: actions/upload-artifact@v4
-        with:
-          name: desktop-pet-exe
-          path: dist/main.exe
+      - name: 打包EXE
+        run: npm run build-exe # 这里替换成你实际打包命令
