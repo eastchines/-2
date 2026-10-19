@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build-exe": "pkg index.js --output app.exe"
+    "build-exe": "pkg index.js --target node20-win-x64 --output app.exe"
   },
   "devDependencies": {
     "pkg": "^5.8.1"
