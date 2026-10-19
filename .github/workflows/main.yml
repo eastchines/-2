@@ -1,35 +1,30 @@
-# GitHub Actions工作流：自动构建Windows EXE程序
-name: 构建 EXE
+名称：构建 EXE: Build EXE
+在：:
+  推送：:
+    分支：[ main ]: [ main ]
 
-# 触发规则：代码push推送时自动执行
-on: push
+职位：:
+  构建：:
+    运行环境：windows-latest: windows-latest
+    步骤：:
+      - 名称：结账代码name: Checkout code
+        使用：actions/checkout@v4: actions/checkout@v4
 
-jobs:
-  build:
-    # 使用Windows虚拟机，打包Windows EXE
-    runs-on: windows-latest
-    steps:
-      # 拉取仓库源码到运行器
-      - name: 检出代码
-        uses: actions/checkout@v6
+      - 名称：设置 Pythonname: Setup Python
+        使用：actions/setup-python@v5: actions/setup-python@v5
+        使用：:
+          python-version: "3.11": "3.11"
 
-      # 配置Node.js环境，使用Node20，适配pkg打包工具
-      - name: 安装Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      - name: 安装 Python 依赖项name: Install python dependencies
+        运行：|: |
+          python -m pip install --upgrade pip
+          pip install pillow pyinstaller pynput
 
-      # 安装项目全部依赖包
-      - name: 执行npm安装依赖
-        run: npm install
+      - 名称：使用 PyInstaller 构建 exename: Build exe with PyInstaller
+        运行：pyinstaller main.py -F -w --hidden-import=PIL --hidden-import=pynput --add-data "&*.png;.": pyinstaller main.py -F -w --hidden-import=PIL --hidden-import=pynput --add-data "*.png;."
 
-      # 执行pkg打包，指定node20-win-x64目标，生成app.exe
-      - name: 打包生成EXE文件
-        run: npm run build-exe
-
-      # 将打包出来的app.exe上传为流水线制品，打包成功后可以直接下载
-      - name: 上传生成的EXE文件
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-app-exe
-          path: app.exe
+      - 名称：上传工件name: Upload artifact
+        使用：actions/upload-artifact@v4: actions/upload-artifact@v4
+        使用：:
+          名称：桌面宠物可执行文件: 桌面宠物可执行文件
+          路径: dist/*.exe: dist/*.exe
