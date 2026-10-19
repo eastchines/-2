@@ -9,20 +9,27 @@ jobs:
     # 使用Windows虚拟机，打包Windows EXE
     runs-on: windows-latest
     steps:
-      # 拉取仓库源码
+      # 拉取仓库源码到运行器
       - name: 检出代码
         uses: actions/checkout@v6
 
-      # 配置Node.js环境
+      # 配置Node.js环境，使用Node20，适配pkg打包工具
       - name: 安装Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 20
 
-      # 安装项目依赖（pkg打包工具会在这里安装）
+      # 安装项目全部依赖包
       - name: 执行npm安装依赖
         run: npm install
 
-      # 打包生成EXE文件
+      # 执行pkg打包，指定node20-win-x64目标，生成app.exe
       - name: 打包生成EXE文件
         run: npm run build-exe
+
+      # 将打包出来的app.exe上传为流水线制品，打包成功后可以直接下载
+      - name: 上传生成的EXE文件
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app-exe
+          path: app.exe
