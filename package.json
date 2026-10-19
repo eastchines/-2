@@ -1,0 +1,11 @@
+{
+  "name": "exe-build-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build-exe": "pkg index.js --output app.exe"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
+  }
+}
