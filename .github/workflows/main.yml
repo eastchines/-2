@@ -1,0 +1,34 @@
+name: Build EXE
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow pyinstaller pynput
+
+      - name: Build exe with PyInstaller
+        run: |
+          pyinstaller main.py -F -w ^
+          --hidden-import=PIL ^
+          --hidden-import=pynput ^
+          --add-data "images;images"
+
+      - name: Upload compiled exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-pet-exe
+          path: dist/main.exe
