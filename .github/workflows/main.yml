@@ -1,20 +1,31 @@
+# 工作流名称：构建 Windows EXE 程序
 name: 构建 EXE
+
+# 触发条件：当代码推送到仓库时自动运行
 on: push
 
+# 任务组
 jobs:
   build:
+    # 运行环境：Windows虚拟机（打包Windows EXE必须用windows-latest）
     runs-on: windows-latest
+
+    # 流水线步骤
     steps:
+      # 步骤1：拉取当前仓库源代码到Runner虚拟机
       - name: 检出代码
         uses: actions/checkout@v6
 
-      - name: 设置 Node.js
+      # 步骤2：安装Node.js环境，使用v4版本Action消除Node20弃用警告
+      - name: 配置Node.js环境
         uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      - name: 安装依赖
+      # 步骤3：安装项目依赖包
+      - name: 安装npm依赖
         run: npm install
 
-      - name: 打包EXE
-        run: npm run build-exe # 改成你package.json里真实的打包脚本
+      # 步骤4：执行打包命令，生成EXE文件
+      - name: 打包生成EXE
+        run: npm run build-exe # 修改为你package.json里真实的打包脚本名称
