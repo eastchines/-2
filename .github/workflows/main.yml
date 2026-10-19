@@ -1,4 +1,4 @@
-名称：构建 EXE: Build EXE: 构建 EXE: Build EXE
+name: Build EXE
 on:
   push:
     branches: [ main ]
@@ -21,10 +21,7 @@ jobs:
           pip install pillow pyinstaller pynput
 
       - name: Build exe with PyInstaller
-        run: |
-          pyinstaller main.py -F -w ^
-          --hidden-import=PIL ^
-          --hidden-import=pynput
+        run: pyinstaller main.py -F -w --hidden-import=PIL --hidden-import=pynput
 
       - name: Upload compiled exe
         uses: actions/upload-artifact@v4
